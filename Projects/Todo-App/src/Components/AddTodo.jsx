@@ -1,22 +1,18 @@
-import { useState } from "react";
+import { useRef } from "react";
 import { MdOutlineAddCircleOutline } from "react-icons/md";
 
 function AddTodo({ onNewItem }) {
-  const [todoName, setTodoName] = useState("");
-  const [todoDate, setTodoDate] = useState("");
-
-  const handleNameChange = (event) => {
-    setTodoName(event.target.value);
-  };
-  const handleDateChange = (event) => {
-    setTodoDate(event.target.value);
-  };
+  const noOfUpdates = useRef(0);
+  const todoNameElement = useRef();
+  const todoDateElement = useRef();
 
   const handleAddButtonClicked = (event) => {
     event.preventDefault();
+    const todoName = todoNameElement.current.value;
+    const todoDate = todoDateElement.current.value;
+    todoNameElement.current.value = "";
+    todoDateElement.current.value = "";
     onNewItem(todoName, todoDate);
-    setTodoDate("");
-    setTodoName("");
   };
   return (
     <div className="container text-center">
@@ -24,13 +20,12 @@ function AddTodo({ onNewItem }) {
         <div className="col-6">
           <input
             type="text"
+            ref={todoNameElement}
             placeholder="Enter Todo Here"
-            value={todoName}
-            onChange={handleNameChange}
           />
         </div>
         <div className="col-4">
-          <input type="date" value={todoDate} onChange={handleDateChange} />
+          <input type="date" ref={todoDateElement} />
         </div>
         <div className="col-2">
           <button className="btn btn-success kg-button">
